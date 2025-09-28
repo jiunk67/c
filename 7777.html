@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐播放器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .audio-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .audio-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+        
+        .audio-button:active {
+            transform: translateY(0);
+        }
+        
+        .audio-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .player-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .file-name {
+            font-size: 12px;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>个人更新文件</h1>
+    
+    <div class="button-container">
+        
+        <button class="audio-button" onclick="playAudio('lhyfd.mp3', '1')">自制lhy草你妈</button>
+        <button class="audio-button" onclick="playAudio('music2.mp3', '音乐2')">播放 音乐2</button>
+        <button class="audio-button" onclick="playAudio('music3.mp3', '音乐3')">播放 音乐3</button>
+        <button class="audio-button" onclick="playAudio('music4.mp3', '音乐4')">播放 音乐4</button>
+        <button class="audio-button" onclick="playAudio('music5.mp3', '音乐5')">播放 音乐5</button>
+        <button class="audio-button" onclick="playAudio('music6.mp3', '音乐6')">播放 音乐6</button>
+        <button class="audio-button" onclick="playAudio('music7.mp3', '音乐7')">播放 音乐7</button>
+        <button class="audio-button" onclick="playAudio('music8.mp3', '音乐8')">播放 音乐8</button>
+        <button class="audio-button" onclick="playAudio('music9.mp3', '音乐9')">播放 音乐9</button>
+        <button class="audio-button" onclick="playAudio('music10.mp3', '音乐10')">播放 音乐10</button>
+        <button class="audio-button" onclick="playAudio('music11.mp3', '音乐11')">播放 音乐11</button>
+        <button class="audio-button" onclick="playAudio('music12.mp3', '音乐12')">播放 音乐12</button>
+        <button class="audio-button" onclick="playAudio('music13.mp3', '音乐13')">播放 音乐13</button>
+        <button class="audio-button" onclick="playAudio('music14.mp3', '音乐14')">播放 音乐14</button>
+        <button class="audio-button" onclick="playAudio('music15.mp3', '音乐15')">播放 音乐15</button>
+        <button class="audio-button" onclick="playAudio('music16.mp3', '音乐16')">播放 音乐16</button>
+        <button class="audio-button" onclick="playAudio('music17.mp3', '音乐17')">播放 音乐17</button>
+        <button class="audio-button" onclick="playAudio('music18.mp3', '音乐18')">播放 音乐18</button>
+        <button class="audio-button" onclick="playAudio('music19.mp3', '音乐19')">播放 音乐19</button>
+        <button class="audio-button" onclick="playAudio('music20.mp3', '音乐20')">播放 音乐20</button>
+    </div>
+
+    <div class="player-container">
+        <p><strong>说明:</strong></p>
+        <ul>
+            <li>内容为本人自制音频</li>
+            
+        </ul>
+    </div>
+
+    <script>
+        // 播放音频的函数
+        function playAudio(fileName, displayName) {
+            // 创建音频对象
+            const audio = new Audio(fileName);
+            
+            // 播放音频
+            audio.play()
+                .then(() => {
+                    console.log(`正在播放: ${displayName} (${fileName})`);
+                    // 可以在这里添加播放成功的提示
+                })
+                .catch(error => {
+                    console.error(`播放失败: ${displayName}`, error);
+                    alert(`无法播放 ${displayName}！\n请确保文件 "${fileName}" 存在于当前目录中。`);
+                });
+        }
+
+        // 可选：预加载所有音频文件（注释掉，因为可能会影响页面加载速度）
+        /*
+        window.addEventListener('load', function() {
+            for (let i = 1; i <= 20; i++) {
+                const audio = new Audio(`music${i}.mp3`);
+                // 预加载但不自动播放
+                audio.preload = 'metadata';
+            }
+        });
+        */
+    </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站导航页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .nav-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-button:nth-child(1) {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        }
+
+        .nav-button:nth-child(2) {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .nav-button:nth-child(3) {
+            background: linear-gradient(45deg, #45b7d1, #96c93d);
+        }
+
+        .nav-button:nth-child(4) {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+        }
+
+        .nav-button:nth-child(5) {
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-button:active {
+            transform: translateY(-1px);
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .button-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .button-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .nav-button {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌐 网站导航</h1>
+        <p style="color: #666; margin-bottom: 20px; font-size: 16px;">
+            点击下方按钮访问不同的网站
+        </p>
+        
+        <div class="button-grid">
+            <a href="https://www.https://jiunk67.github.io/c/7777.html" target="_blank" class="nav-button">
+                <span class="button-text">音频类</span>
+            </a>
+            
+            <a href="https://www.github.com" target="_blank" class="nav-button">
+                <span class="button-text">💻 GitHub</span>
+            </a>
+            
+            <a href="https://www.google.com" target="_blank" class="nav-button">
+                <span class="button-text">🌍 Google</span>
+            </a>
+            
+            <a href="https://www.bilibili.com" target="_blank" class="nav-button">
+                <span class="button-text">📺 哔哩哔哩</span>
+            </a>
+            
+            <a href="https://www.taobao.com" target="_blank" class="nav-button">
+                <span class="button-text">🛒 淘宝网</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 为按钮添加点击效果
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                // 可以在这里添加点击统计或其他逻辑
+                console.log('点击了按钮:', this.querySelector('.button-text').textContent);
+            });
+        });
+
+        // 页面加载动画
+        window.addEventListener('load', function() {
+            document.querySelector('.container').style.opacity = '0';
+            document.querySelector('.container').style.transform = 'translateY(30px)';
+            document.querySelector('.container').style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                document.querySelector('.container').style.opacity = '1';
+                document.querySelector('.container').style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
