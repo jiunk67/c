@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频导航</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .video-button {
+            background: linear-gradient(45deg, #4b6cb7, #182848);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-button i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .video-player {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .button-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .video-button {
+                padding: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 视频导航</h1>
+        
+        <div class="button-grid">
+            <button class="video-button" onclick="playVideo('video1.mp4')">
+                <i>🎥</i> 视频1
+            </button>
+            <button class="video-button" onclick="playVideo('video2.mp4')">
+                <i>🎥</i> 视频2
+            </button>
+            <button class="video-button" onclick="playVideo('video3.mp4')">
+                <i>🎥</i> 视频3
+            </button>
+            <button class="video-button" onclick="playVideo('video4.mp4')">
+                <i>🎥</i> 视频4
+            </button>
+            <button class="video-button" onclick="playVideo('video5.mp4')">
+                <i>🎥</i> 视频5
+            </button>
+            <button class="video-button" onclick="playVideo('video6.mp4')">
+                <i>🎥</i> 视频6
+            </button>
+            <button class="video-button" onclick="playVideo('video7.mp4')">
+                <i>🎥</i> 视频7
+            </button>
+            <button class="video-button" onclick="playVideo('video8.mp4')">
+                <i>🎥</i> 视频8
+            </button>
+            <button class="video-button" onclick="playVideo('video9.mp4')">
+                <i>🎥</i> 视频9
+            </button>
+            <button class="video-button" onclick="playVideo('video10.mp4')">
+                <i>🎥</i> 视频10
+            </button>
+            <button class="video-button" onclick="playVideo('video11.mp4')">
+                <i>🎥</i> 视频11
+            </button>
+            <button class="video-button" onclick="playVideo('video12.mp4')">
+                <i>🎥</i> 视频12
+            </button>
+            <button class="video-button" onclick="playVideo('video13.mp4')">
+                <i>🎥</i> 视频13
+            </button>
+            <button class="video-button" onclick="playVideo('video14.mp4')">
+                <i>🎥</i> 视频14
+            </button>
+            <button class="video-button" onclick="playVideo('video15.mp4')">
+                <i>🎥</i> 视频15
+            </button>
+            <button class="video-button" onclick="playVideo('video16.mp4')">
+                <i>🎥</i> 视频16
+            </button>
+            <button class="video-button" onclick="playVideo('video17.mp4')">
+                <i>🎥</i> 视频17
+            </button>
+            <button class="video-button" onclick="playVideo('video18.mp4')">
+                <i>🎥</i> 视频18
+            </button>
+            <button class="video-button" onclick="playVideo('video19.mp4')">
+                <i>🎥</i> 视频19
+            </button>
+            <button class="video-button" onclick="playVideo('video20.mp4')">
+                <i>🎥</i> 视频20
+            </button>
+        </div>
+        
+        <div class="video-player" id="videoPlayer">
+            <video controls id="videoElement">
+                您的浏览器不支持视频播放。
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function playVideo(videoSrc) {
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoElement = document.getElementById('videoElement');
+            
+            // 设置视频源
+            videoElement.src = videoSrc;
+            
+            // 显示视频播放器
+            videoPlayer.style.display = 'block';
+            
+            // 加载并播放视频
+            videoElement.load();
+            videoElement.play();
+            
+            // 滚动到视频位置
+            videoPlayer.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
