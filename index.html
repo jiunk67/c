@@ -119,8 +119,8 @@
                 showMessage('请输入密码', 'error');
                 return;
             }
-            
-            if (inputPassword.length !== 4) {
+            #密码长度检测（修改位数时必修改）
+            if (inputPassword.length !== 6) {
                 showMessage('密码错误哦', 'error');
                 return;
             }
