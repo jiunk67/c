@@ -1,1 +1,1 @@
-rm -rf /storage/emulated/0/八戒机器人
+reboot
