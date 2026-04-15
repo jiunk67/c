@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目选择页面</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 服务器连接状态 */
+        .server-status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .server-status.offline {
+            color: #f44336;
+        }
+
+        .server-status.offline .status-indicator {
+            background-color: #f44336;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* 弹窗样式 */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .popup-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease;
+        }
+        
+        .popup-content h2 {
+            color: #333;
+            margin-top: 0;
+            text-align: center;
+        }
+        
+        .popup-content p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .popup-content ul {
+            color: #666;
+            line-height: 1.8;
+            padding-left: 20px;
+        }
+        
+        .popup-content .close-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .popup-content .close-btn:hover {
+            background-color: #45a049;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 服务器连接状态 -->
+    <div class="server-status" id="server-status">
+        <span class="status-indicator"></span>
+        <span class="status-text">服务器，连接成功</span>
+    </div>
+    
+    <div class="projects-container">
+        <h1>项目选择</h1>
+        <p>请选择您需要的项目</p>
+        
+        <div class="project-list">
+            <div class="project-item" data-project="翻车单" data-description="保底400w，一把翻车给一把金枪，老板禁止故意翻车，否则将无法完单。">
+                <h3>翻车单</h3>
+                <p class="price">价格：3.88元</p>
+                <p>描述：保底400w，一把翻车给一把金枪，老板禁止故意翻车，否则将无法完单。</p>
+            </div>
+            
+            <div class="project-item" data-project="普通单" data-description="成功撤离，累计总值1000万">
+                <h3>普通单</h3>
+                <p class="price">价格：10.00元</p>
+                <p>描述：成功撤离，累计总值1000万</p>
+            </div>
+            
+            <div class="project-item" data-project="黑卡单" data-description="打手带你开黑卡，整个黑门全归老板，开完黑门撤离成功为止">
+                <h3>黑卡单</h3>
+                <p class="price">价格：6.00元</p>
+                <p>描述：打手带你开黑卡，整个黑门全归老板，开完黑门撤离成功为止</p>
+            </div>
+            
+            <div class="project-item" data-project="经典上分" data-description="打手会将人机让给老板，尽量性的带老板多杀人">
+                <h3>经典上分</h3>
+                <p class="price">价格：5.00元/100分</p>
+                <p>描述：打手会将人机让给老板，尽量性的带老板多杀人</p>
+            </div>
+            
+            <div class="project-item" data-project="单价存款" data-description="给多少钱就给你打多少万">
+                <h3>单价存款</h3>
+                <p class="price">价格：1.00元/100万</p>
+                <p>描述：给多少钱就给你打多少万</p>
+            </div>
+            
+            <div class="project-item" data-project="老鼠单" data-description="打手，带你一起当老六，物资全部给老板，总值没有上限，撤离成功为止">
+                <h3>老鼠单</h3>
+                <p class="price">价格：3.00元</p>
+                <p>描述：打手，带你一起当老六，物资全部给老板，总值没有上限，撤离成功为止</p>
+            </div>
+        </div>
+        
+        <div class="form-container" id="order-form">
+            <h2>订单信息</h2>
+            <form id="project-form">
+
+                
+                <div class="form-group">
+                    <label for="game-id">游戏ID：</label>
+                    <input type="text" id="game-id" name="game-id" placeholder="请输入您的游戏ID">
+                </div>
+                
+                <div class="form-group">
+                    <label for="game-number">游戏编号：</label>
+                    <input type="text" id="game-number" name="game-number" placeholder="请输入您的游戏编号">
+                </div>
+                
+                <div class="form-group">
+                    <label for="game-server">游戏区服：</label>
+                    <select id="game-server" name="game-server">
+                        <option value="">请选择区服</option>
+                        <option value="QQ区">QQ区</option>
+                        <option value="微信区">微信区</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="要求">其他要求：</label>
+                    <textarea id="要求" name="要求" placeholder="请输入您的其他要求"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-submit">提交订单</button>
+            </form>
+            
+            <div id="message"></div>
+        </div>
+        
+        <a href="index.html" class="btn btn-back">返回首页</a>
+    </div>
+    
+    <!-- 弹窗 -->
+    <div class="popup-overlay" id="welcome-popup">
+        <div class="popup-content">
+            <h2>感谢您对我们的信任</h2>
+            <p>欢迎您来点单，以下是点单方法：</p>
+            <ul>
+                <li>确定项目之后，直接点击白框内的区域</li>
+                <li>输入必要信息之后，加入QQ群</li>
+                <li>付款成功之后，截图发到群里，否则打手可能不会邀你</li>
+                <li>确认结单的时候，游戏内扣一</li>
+                <li>对打手不满意，Q群可以投诉</li>
+                <li>提交订单之后，自动会跳转到支付页面和QQ群添加页面</li>
+            </ul>
+            <button class="close-btn" onclick="closePopup()">我知道了</button>
+        </div>
+    </div>
+    
+    <script>
+        // 关闭弹窗函数
+        function closePopup() {
+            document.getElementById('welcome-popup').style.display = 'none';
+        }
+        
+        // 页面加载完成后显示弹窗
+        window.onload = function() {
+            // 可以在这里添加其他页面加载逻辑
+        };
+    </script>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>
