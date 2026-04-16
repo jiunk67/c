@@ -7,13 +7,13 @@ const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// 读取YX.TXT文件中的邮箱地址
+// 读取YX.txt文件中的邮箱地址
 function getEmailList() {
     try {
-        const data = fs.readFileSync('./YX.TXT', 'utf8');
+        const data = fs.readFileSync('./YX.txt', 'utf8');
         return data.split('\n').filter(email => email.trim() !== '');
     } catch (error) {
-        console.error('读取YX.TXT文件失败:', error);
+        console.error('读取YX.txt文件失败:', error);
         return ['2665997116@qq.com']; // 默认邮箱
     }
 }
