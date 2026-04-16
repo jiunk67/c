@@ -1,40 +1,31 @@
-// 项目选择功能
-document.addEventListener('DOMContentLoaded', function() {
-    // 项目选择功能
-    const projectItems = document.querySelectorAll('.project-item');
-    let selectedProject = '';
-    let selectedPrice = '';
-    let selectedDescription = '';
+});
+}
+
+// 检查服务器连接状态
+function checkServerStatus() {
+    const serverStatus = document.getElementById('server-status');
+    if (!serverStatus) return;
     
-    if (projectItems.length > 0) {
-        projectItems.forEach(item => {
-            item.addEventListener('click', function() {
-                selectedProject = this.getAttribute('data-project');
-                // 获取项目价格
-                selectedPrice = this.querySelector('.price').textContent.replace('价格：', '');
-                // 获取项目描述
-                selectedDescription = this.getAttribute('data-description');
-                
-                // 滚动到表单
-                document.getElementById('order-form').scrollIntoView({ behavior: 'smooth' });
-            });
+    // 尝试连接服务器
+    fetch('https://c-piqm.onrender.com')
+        .then(response => {
+            // 连接成功
+            serverStatus.classList.remove('offline');
+            serverStatus.querySelector('.status-text').textContent = '服务器，连接成功';
+        })
+        .catch(error => {
+            // 连接失败
+            serverStatus.classList.add('offline');
+            serverStatus.querySelector('.status-text').textContent = '服务器，连接失败';
         });
-    }
-    
-    // 表单提交功能
-    const projectForm = document.getElementById('project-form');
-    if (projectForm) {
-        projectForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const projectName = selectedProject;
-            const gameId = (document.getElementById('game-id').value || '无').substring(0, 50);
-            const gameNumber = (document.getElementById('game-number').value || '无').substring(0, 50);
-            const gameServer = document.getElementById('game-server').value || '无';
-            const yaoqiu = (document.getElementById('要求').value || '无指定').substring(0, 50);
-            
-            if (!projectName) {
-                showMessage('请先选择一个项目', 'error');
+}
+
+// 页面加载时检查服务器状态
+window.addEventListener('load', function() {
+    checkServerStatus();
+    // 每5秒检查一次服务器状态
+    setInterval(checkServerStatus, 5000);
+});                showMessage('请先选择一个项目', 'error');
                 return;
             }
             
