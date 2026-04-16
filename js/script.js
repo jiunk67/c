@@ -73,6 +73,10 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
+        // 添加本次提交记录（无论成功与否都记录）
+        recentRecords.push({ time: currentTime });
+        localStorage.setItem('submitRecords', JSON.stringify(recentRecords));
+        
         // 发送邮件请求
         fetch('https://c-piqm.onrender.com/send-email', {
             method: 'POST',
@@ -84,10 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 添加本次提交记录
-                recentRecords.push({ time: currentTime });
-                localStorage.setItem('submitRecords', JSON.stringify(recentRecords));
-                
                 showPopup('订单提交成功，请注意游戏账号打手邀请提醒，先不要付款，等待打手邀请之后，再问打手哪个收款码是他本人再进行付款');
             } else {
                 showMessage('失败，请稍后重试', 'error');
@@ -195,6 +195,10 @@ if (joinForm) {
             return;
         }
         
+        // 添加本次提交记录（无论成功与否都记录）
+        recentRecords.push({ time: currentTime });
+        localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
+        
         // 构建邮件数据
         const emailData = {
             type: '加入我们',
@@ -215,10 +219,6 @@ if (joinForm) {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 添加本次提交记录
-                recentRecords.push({ time: currentTime });
-                localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
-                
                 showPopup('提交成功，我们会尽快与您联系');
             } else {
                 showMessage('提交失败，请稍后重试', 'error');
@@ -335,6 +335,10 @@ if (reportForm) {
             return;
         }
         
+        // 添加本次提交记录（无论成功与否都记录）
+        recentRecords.push({ time: currentTime });
+        localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
+        
         // 构建邮件数据
         const emailData = {
             type: '举报打手',
@@ -355,10 +359,6 @@ if (reportForm) {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 添加本次提交记录
-                recentRecords.push({ time: currentTime });
-                localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
-                
                 showPopup('举报提交成功，我们会尽快处理');
             } else {
                 showMessage('提交失败，请稍后重试', 'error');
