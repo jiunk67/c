@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>付款页面</title>
+    <title>打手付款码</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* 服务器连接状态 */
@@ -54,6 +54,42 @@
                 opacity: 1;
             }
         }
+        
+        /* 收款码容器 */
+        .code-container {
+            margin: 30px auto;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .code-item {
+            margin-bottom: 40px;
+        }
+        
+        .code-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #3498db;
+        }
+        
+        .qr-code {
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -64,43 +100,26 @@
     </div>
     
     <div class="payment-container">
-        <h1>付款页面</h1>
-        <p>请扫描下方二维码进行付款</p>
+        <h1>打手付款码</h1>
+        <p>请选择对应的打手付款码进行付款</p>
         
-        <div class="payment-info">
-            <a href="payment-codes.html" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 30px;">前往获取打手付款码</a>
-            
-            <h2>付款说明</h2>
-            <p>1. 请使用微信或支付宝扫描上方收款码</p>
-            <p>2. 输入正确的金额</p>
-            <p>3. 付款后请保留付款凭证</p>
-            <p>4. 付款完成后请联系客服确认</p>
-            <p>5. 将支付成功的截图发到QQ群里面，QQ群往下翻</p>
-            
-            <div class="payment-rules">
-                <h3>俱乐部分钱规则</h3>
-                <ul>
-                    <li>董事长收1%</li>
-                    <li>其余归打手所有</li>
-                    <li>所有分配将在项目完成后24小时内结算</li>
-                </ul>
+        <div class="code-container">
+            <div class="code-item">
+                <h2 class="code-title">董事长</h2>
+                <div class="qr-code">
+                    <img src="./fk.png" alt="董事长收款码" style="width: 100%; height: 100%; object-fit: contain;">
+                </div>
             </div>
             
-            <div class="qq-group">
-                <h3>加入俱乐部QQ群</h3>
-                <div class="qq-group-info">
-                    <div class="qq-qr-code">
-                        <img src="./jlbqqq.jpg" alt="俱乐部QQ群二维码" style="width: 200px; height: 200px; object-fit: contain;">
-                    </div>
-                    <div class="qq-group-details">
-                        <p>QQ群号：217891046</p>
-                        <a href="mqqapi://group/join?groupid=217891046" class="btn btn-qq">加入群聊</a>
-                    </div>
+            <div class="code-item">
+                <h2 class="code-title">小晨</h2>
+                <div class="qr-code">
+                    <img src="./fk2.jpg" alt="小晨收款码" style="width: 100%; height: 100%; object-fit: contain;">
                 </div>
             </div>
         </div>
         
-        <a href="index.html" class="btn btn-back">返回首页</a>
+        <a href="payment.html" class="btn btn-back">返回付款页面</a>
     </div>
     <script src="js/script.js"></script>
 </body>

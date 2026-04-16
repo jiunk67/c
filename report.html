@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>付款页面</title>
+    <title>举报打手</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
         /* 服务器连接状态 */
@@ -64,40 +64,20 @@
     </div>
     
     <div class="payment-container">
-        <h1>付款页面</h1>
-        <p>请扫描下方二维码进行付款</p>
+        <h1>举报打手</h1>
+        <p>请在下方输入您要举报的内容</p>
         
-        <div class="payment-info">
-            <a href="payment-codes.html" class="btn btn-primary" style="font-size: 1.2rem; padding: 15px 30px;">前往获取打手付款码</a>
-            
-            <h2>付款说明</h2>
-            <p>1. 请使用微信或支付宝扫描上方收款码</p>
-            <p>2. 输入正确的金额</p>
-            <p>3. 付款后请保留付款凭证</p>
-            <p>4. 付款完成后请联系客服确认</p>
-            <p>5. 将支付成功的截图发到QQ群里面，QQ群往下翻</p>
-            
-            <div class="payment-rules">
-                <h3>俱乐部分钱规则</h3>
-                <ul>
-                    <li>董事长收1%</li>
-                    <li>其余归打手所有</li>
-                    <li>所有分配将在项目完成后24小时内结算</li>
-                </ul>
-            </div>
-            
-            <div class="qq-group">
-                <h3>加入俱乐部QQ群</h3>
-                <div class="qq-group-info">
-                    <div class="qq-qr-code">
-                        <img src="./jlbqqq.jpg" alt="俱乐部QQ群二维码" style="width: 200px; height: 200px; object-fit: contain;">
-                    </div>
-                    <div class="qq-group-details">
-                        <p>QQ群号：217891046</p>
-                        <a href="mqqapi://group/join?groupid=217891046" class="btn btn-qq">加入群聊</a>
-                    </div>
+        <div class="form-container">
+            <form id="report-form">
+                <div class="form-group">
+                    <label for="report-content">举报内容：</label>
+                    <textarea id="report-content" name="report-content" placeholder="请详细描述您要举报的内容" rows="10"></textarea>
                 </div>
-            </div>
+                
+                <button type="submit" class="btn btn-submit">提交</button>
+            </form>
+            
+            <div id="message"></div>
         </div>
         
         <a href="index.html" class="btn btn-back">返回首页</a>

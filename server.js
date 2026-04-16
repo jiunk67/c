@@ -99,17 +99,71 @@ app.post('/send-email', (req, res) => {
     }
 });
 
-// 邮件发送路由 - 加入我们
+// 邮件发送路由 - 加入我们和举报打手
 app.post('/send-join-request', (req, res) => {
-    const { qq, wechat, other, message } = req.body;
+    const { type, qq, wechat, other, message } = req.body;
     
     // 读取邮箱列表
     const emailList = getEmailList();
     
-    console.log('收到加入请求:', {
+    console.log('收到请求:', {
+        type,
         qq,
         wechat,
         other,
+        message,
+        to: emailList
+    });
+    
+    // 根据type设置邮件标题
+    let subject = '俱乐部加入请求';
+    let emailText = `QQ号: ${qq}\n微信号: ${wechat}\n其他联系方式: ${other}\n留言: ${message}`;
+    
+    console.log('检查type字段:', type);
+    
+    if (type && type.includes('举报')) {
+        subject = '打手举报通知';
+        emailText = message;
+        console.log('设置为举报邮件:', subject, emailText);
+    } else {
+        console.log('设置为加入请求邮件:', subject, emailText);
+    }
+    
+    // 检查是否有真实的传输器
+    if (transporter) {
+        const mailOptions = {
+            from: 'suizhao_1120@qq.com',
+            to: emailList,
+            subject: subject,
+            text: emailText
+        };
+        
+        console.log('准备发送邮件:', mailOptions);
+        
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.error('邮件发送失败:', error);
+                res.status(500).send('邮件发送失败: ' + error.message);
+            } else {
+                console.log('邮件已发送:', info.response);
+                res.status(200).send('邮件发送成功');
+            }
+        });
+    } else {
+        // 模拟邮件发送
+        console.log('使用模拟模式发送邮件');
+        res.status(200).send('邮件发送成功（模拟）');
+    }
+});
+
+// 邮件发送路由 - 举报打手
+app.post('/send-report', (req, res) => {
+    const { message } = req.body;
+    
+    // 读取邮箱列表
+    const emailList = getEmailList();
+    
+    console.log('收到举报请求:', {
         message,
         to: emailList
     });
@@ -119,8 +173,8 @@ app.post('/send-join-request', (req, res) => {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
-            subject: '俱乐部加入请求',
-            text: `QQ号: ${qq}\n微信号: ${wechat}\n其他联系方式: ${other}\n留言: ${message}`
+            subject: '打手举报通知',
+            text: message
         };
         
         console.log('准备发送邮件:', mailOptions);

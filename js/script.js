@@ -38,65 +38,60 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // 检查提交频率
-            const submitRecords = JSON.parse(localStorage.getItem('submitRecords') || '[]');
-            const currentTime = Date.now();
-            const oneMinuteAgo = currentTime - 60 * 1000;
-            
-            // 过滤出一分钟内的提交记录
-            const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-            
-            if (recentRecords.length >= 1) {
-                showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
-                return;
-            }
-            
-            // 添加本次提交记录
-            recentRecords.push({ time: currentTime });
-            localStorage.setItem('submitRecords', JSON.stringify(recentRecords));
-            
             // 获取当前时间
-            const formattedTime = new Date().toLocaleString('zh-CN', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            
-            // 构建邮件数据
-            const emailData = {
-                projectName: projectName,
-                projectPrice: selectedPrice,
-                projectDescription: selectedDescription,
-                gameId: gameId,
-                gameNumber: gameNumber,
-                gameServer: gameServer,
-                要求: yaoqiu,
-                time: formattedTime
-            };
-            
-            // 发送邮件请求
-            fetch('https://c-piqm.onrender.com/send-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(emailData)
-            })
-            .then(response => response.text())
-            .then(data => {
-                if (data === '邮件发送成功') {
-                    showPopup('订单提交成功，请注意游戏账号打手邀请提醒，先不要付款，等待打手邀请之后，再问打手哪个收款码是他本人再进行付款');
-                } else {
-                    showMessage('失败，请稍后重试', 'error');
-                }
-            })
-            .catch(error => {
-                console.error('发送请求失败:', error);
-                showMessage('网络错误，请稍后重试', 'error');
-            });
+        const formattedTime = new Date().toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+        
+        // 构建邮件数据
+        const emailData = {
+            projectName: projectName,
+            projectPrice: selectedPrice,
+            projectDescription: selectedDescription,
+            gameId: gameId,
+            gameNumber: gameNumber,
+            gameServer: gameServer,
+            要求: yaoqiu,
+            time: formattedTime
+        };
+        
+        // 发送邮件请求
+        fetch('https://c-piqm.onrender.com/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(emailData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.includes('邮件发送成功')) {
+                // 检查提交频率
+                const submitRecords = JSON.parse(localStorage.getItem('submitRecords') || '[]');
+                const currentTime = Date.now();
+                const oneMinuteAgo = currentTime - 60 * 1000;
+                
+                // 过滤出一分钟内的提交记录
+                const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
+                
+                // 添加本次提交记录
+                recentRecords.push({ time: currentTime });
+                localStorage.setItem('submitRecords', JSON.stringify(recentRecords));
+                
+                showPopup('订单提交成功，请注意游戏账号打手邀请提醒，先不要付款，等待打手邀请之后，再问打手哪个收款码是他本人再进行付款');
+            } else {
+                showMessage('失败，请稍后重试', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('发送请求失败:', error);
+            showMessage('网络错误，请稍后重试', 'error');
+        });
             
             // 重置表单和选中的项目
             setTimeout(() => {
@@ -182,23 +177,6 @@ if (joinForm) {
         const other = (document.getElementById('other').value || '无').substring(0, 50);
         const message = (document.getElementById('message').value || '无').substring(0, 50);
         
-        // 检查提交频率
-        const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
-        const currentTime = Date.now();
-        const oneMinuteAgo = currentTime - 60 * 1000;
-        
-        // 过滤出一分钟内的提交记录
-        const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-        
-        if (recentRecords.length >= 1) {
-            showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
-            return;
-        }
-        
-        // 添加本次提交记录
-        recentRecords.push({ time: currentTime });
-        localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
-        
         // 构建邮件数据
         const emailData = {
             type: '加入我们',
@@ -218,8 +196,20 @@ if (joinForm) {
         })
         .then(response => response.text())
         .then(data => {
-            if (data === '邮件发送成功') {
-                showMessage('提交成功，我们会尽快与您联系', 'success');
+            if (data.includes('邮件发送成功')) {
+                // 检查提交频率
+                const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
+                const currentTime = Date.now();
+                const oneMinuteAgo = currentTime - 60 * 1000;
+                
+                // 过滤出一分钟内的提交记录
+                const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
+                
+                // 添加本次提交记录
+                recentRecords.push({ time: currentTime });
+                localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
+                
+                showPopup('提交成功，我们会尽快与您联系');
             } else {
                 showMessage('提交失败，请稍后重试', 'error');
             }
@@ -307,6 +297,68 @@ document.head.appendChild(style);
 // 关闭举报弹窗函数
 function closeReportPopup() {
     document.getElementById('report-popup').style.display = 'none';
+}
+
+// 举报打手表单提交功能
+const reportForm = document.getElementById('report-form');
+if (reportForm) {
+    reportForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const reportContent = (document.getElementById('report-content').value || '无').substring(0, 500);
+        
+        if (!reportContent || reportContent === '无') {
+            showMessage('请输入举报内容', 'error');
+            return;
+        }
+        
+        // 构建邮件数据
+        const emailData = {
+            type: '举报打手',
+            qq: '无',
+            wechat: '无',
+            other: '无',
+            message: reportContent
+        };
+        
+        // 发送邮件请求
+        fetch('https://c-piqm.onrender.com/send-join-request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(emailData)
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (data.includes('邮件发送成功')) {
+                // 检查提交频率
+                const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
+                const currentTime = Date.now();
+                const oneMinuteAgo = currentTime - 60 * 1000;
+                
+                // 过滤出一分钟内的提交记录
+                const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
+                
+                // 添加本次提交记录
+                recentRecords.push({ time: currentTime });
+                localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
+                
+                showPopup('举报提交成功，我们会尽快处理');
+            } else {
+                showMessage('提交失败，请稍后重试', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('发送请求失败:', error);
+            showMessage('网络错误，请稍后重试', 'error');
+        });
+        
+        // 重置表单
+        setTimeout(() => {
+            reportForm.reset();
+        }, 3000);
+    });
 }
 
 // 检查服务器连接状态
