@@ -184,17 +184,17 @@
                 
                 <div class="form-group">
                     <label for="game-id">游戏ID：</label>
-                    <input type="text" id="game-id" name="game-id" placeholder="请输入您的游戏ID">
+                    <input type="text" id="game-id" name="game-id" placeholder="请输入您的游戏ID" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="game-number">游戏编号：</label>
-                    <input type="text" id="game-number" name="game-number" placeholder="请输入您的游戏编号">
+                    <input type="text" id="game-number" name="game-number" placeholder="请输入您的游戏编号" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="game-server">游戏区服：</label>
-                    <select id="game-server" name="game-server">
+                    <select id="game-server" name="game-server" required>
                         <option value="">请选择区服</option>
                         <option value="QQ区">QQ区</option>
                         <option value="微信区">微信区</option>
@@ -203,8 +203,39 @@
                 
                 <div class="form-group">
                     <label for="要求">其他要求：</label>
-                    <textarea id="要求" name="要求" placeholder="请输入您的其他要求"></textarea>
+                    <textarea id="要求" name="要求" placeholder="请输入您的其他要求" required></textarea>
                 </div>
+                
+                <style>
+                    /* 响应式设计 */
+                    @media (max-width: 768px) {
+                        .projects-container {
+                            padding: 20px 15px;
+                        }
+                        
+                        .project-item {
+                            padding: 15px;
+                            margin-bottom: 15px;
+                        }
+                        
+                        .form-container {
+                            padding: 20px 15px;
+                        }
+                        
+                        .form-group input,
+                        .form-group select,
+                        .form-group textarea {
+                            width: 100%;
+                            padding: 10px;
+                            font-size: 16px;
+                        }
+                        
+                        .btn {
+                            padding: 12px 24px;
+                            font-size: 16px;
+                        }
+                    }
+                </style>
                 
                 <button type="submit" class="btn btn-submit">提交订单</button>
             </form>

@@ -94,28 +94,68 @@
             <form id="join-form">
                 <div class="form-group">
                     <label for="qq">QQ号：</label>
-                    <input type="text" id="qq" name="qq" placeholder="请输入您的QQ号">
+                    <input type="text" id="qq" name="qq" placeholder="请输入您的QQ号" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="wechat">微信号：</label>
-                    <input type="text" id="wechat" name="wechat" placeholder="请输入您的微信号">
+                    <input type="text" id="wechat" name="wechat" placeholder="请输入您的微信号" required>
                 </div>
                 
                 <div class="form-group">
                     <label for="other">其他联系方式：</label>
-                    <textarea id="other" name="other" placeholder="请输入其他联系方式"></textarea>
+                    <textarea id="other" name="other" placeholder="请输入其他联系方式" required></textarea>
                 </div>
                 
                 <div class="form-group">
                     <label for="message">留言：</label>
-                    <textarea id="message" name="message" placeholder="请输入您的留言"></textarea>
+                    <textarea id="message" name="message" placeholder="请输入您的留言" required></textarea>
                 </div>
+                
+                <style>
+                    /* 响应式设计 */
+                    @media (max-width: 768px) {
+                        .join-container {
+                            padding: 20px 15px;
+                        }
+                        
+                        .announcement {
+                            padding: 15px;
+                            margin-bottom: 20px;
+                        }
+                        
+                        .qq-group-info {
+                            flex-direction: column;
+                            align-items: center;
+                            text-align: center;
+                        }
+                        
+                        .qq-qr-code {
+                            margin-bottom: 15px;
+                        }
+                        
+                        .form-container {
+                            padding: 20px 15px;
+                        }
+                        
+                        .form-group input,
+                        .form-group textarea {
+                            width: 100%;
+                            padding: 10px;
+                            font-size: 16px;
+                        }
+                        
+                        .btn {
+                            padding: 12px 24px;
+                            font-size: 16px;
+                        }
+                    }
+                </style>
                 
                 <button type="submit" class="btn btn-submit">提交</button>
             </form>
             
-            <div id="response-message"></div>
+            <div id="message"></div>
         </div>
         
         <a href="index.html" class="btn btn-back">返回首页</a>

@@ -71,8 +71,32 @@
             <form id="report-form">
                 <div class="form-group">
                     <label for="report-content">举报内容：</label>
-                    <textarea id="report-content" name="report-content" placeholder="请详细描述您要举报的内容" rows="10"></textarea>
+                    <textarea id="report-content" name="report-content" placeholder="请详细描述您要举报的内容" rows="10" required></textarea>
                 </div>
+                
+                <style>
+                    /* 响应式设计 */
+                    @media (max-width: 768px) {
+                        .payment-container {
+                            padding: 20px 15px;
+                        }
+                        
+                        .form-container {
+                            padding: 20px 15px;
+                        }
+                        
+                        .form-group textarea {
+                            width: 100%;
+                            padding: 10px;
+                            font-size: 16px;
+                        }
+                        
+                        .btn {
+                            padding: 12px 24px;
+                            font-size: 16px;
+                        }
+                    }
+                </style>
                 
                 <button type="submit" class="btn btn-submit">提交</button>
             </form>

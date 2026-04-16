@@ -60,6 +60,19 @@ document.addEventListener('DOMContentLoaded', function() {
             time: formattedTime
         };
         
+        // 检查提交频率
+        const submitRecords = JSON.parse(localStorage.getItem('submitRecords') || '[]');
+        const currentTime = Date.now();
+        const oneMinuteAgo = currentTime - 60 * 1000;
+        
+        // 过滤出一分钟内的提交记录
+        const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
+        
+        if (recentRecords.length >= 1) {
+            showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
+            return;
+        }
+        
         // 发送邮件请求
         fetch('https://c-piqm.onrender.com/send-email', {
             method: 'POST',
@@ -71,14 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 检查提交频率
-                const submitRecords = JSON.parse(localStorage.getItem('submitRecords') || '[]');
-                const currentTime = Date.now();
-                const oneMinuteAgo = currentTime - 60 * 1000;
-                
-                // 过滤出一分钟内的提交记录
-                const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-                
                 // 添加本次提交记录
                 recentRecords.push({ time: currentTime });
                 localStorage.setItem('submitRecords', JSON.stringify(recentRecords));
@@ -177,6 +182,19 @@ if (joinForm) {
         const other = (document.getElementById('other').value || '无').substring(0, 50);
         const message = (document.getElementById('message').value || '无').substring(0, 50);
         
+        // 检查提交频率
+        const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
+        const currentTime = Date.now();
+        const oneMinuteAgo = currentTime - 60 * 1000;
+        
+        // 过滤出一分钟内的提交记录
+        const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
+        
+        if (recentRecords.length >= 1) {
+            showMessage('每分钟只能提交一次，请稍后再试', 'error');
+            return;
+        }
+        
         // 构建邮件数据
         const emailData = {
             type: '加入我们',
@@ -197,14 +215,6 @@ if (joinForm) {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 检查提交频率
-                const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
-                const currentTime = Date.now();
-                const oneMinuteAgo = currentTime - 60 * 1000;
-                
-                // 过滤出一分钟内的提交记录
-                const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-                
                 // 添加本次提交记录
                 recentRecords.push({ time: currentTime });
                 localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
@@ -312,6 +322,19 @@ if (reportForm) {
             return;
         }
         
+        // 检查提交频率
+        const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
+        const currentTime = Date.now();
+        const oneMinuteAgo = currentTime - 60 * 1000;
+        
+        // 过滤出一分钟内的提交记录
+        const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
+        
+        if (recentRecords.length >= 1) {
+            showMessage('每分钟只能提交一次，请稍后再试', 'error');
+            return;
+        }
+        
         // 构建邮件数据
         const emailData = {
             type: '举报打手',
@@ -332,14 +355,6 @@ if (reportForm) {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 检查提交频率
-                const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
-                const currentTime = Date.now();
-                const oneMinuteAgo = currentTime - 60 * 1000;
-                
-                // 过滤出一分钟内的提交记录
-                const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-                
                 // 添加本次提交记录
                 recentRecords.push({ time: currentTime });
                 localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
