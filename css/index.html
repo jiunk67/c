@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浮木俱乐部</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/welcome.css">
+</head>
+<body>
+    <div class="welcome-wrapper">
+        <!-- 服务器连接状态 -->
+        <div class="server-status" id="server-status">
+            <span class="status-indicator"></span>
+            <span class="status-text">服务器，连接成功</span>
+        </div>
+        
+        <!-- 页面加载动画 -->
+        <div class="loader"></div>
+        
+        <!-- 主内容 -->
+        <div class="welcome-container">
+            <div class="welcome-content">
+                <h1 class="welcome-title">欢迎来到浮木俱乐部</h1>
+                <p class="welcome-subtitle">这里是我们俱乐部的专属页面，您可以在这里进行付款和选择项目</p>
+                <div class="button-container">
+                    <a href="payment.html" class="btn btn-primary">付款</a>
+                    <a href="projects.html" class="btn btn-secondary">开始点单</a>
+                    <a href="join.html" class="btn btn-tertiary">加入我们</a>
+                </div>
+            </div>
+            
+            <!-- 装饰元素 -->
+            <div class="decorative-elements">
+                <div class="decor-circle decor-1"></div>
+                <div class="decor-circle decor-2"></div>
+                <div class="decor-circle decor-3"></div>
+                <div class="decor-circle decor-4"></div>
+            </div>
+        </div>
+        
+        <!-- 举报弹窗 -->
+        <div class="report-popup" id="report-popup">
+            <div class="popup-content">
+                <h3>举报说明</h3>
+                <p>发现打手对你不利，可以进行举报，请加群后找董事长举报，本网站暂未完全完善。</p>
+                <button class="close-btn" onclick="closeReportPopup()">我知道了</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加入我们</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 服务器连接状态 */
+        .server-status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .server-status.offline {
+            color: #f44336;
+        }
+
+        .server-status.offline .status-indicator {
+            background-color: #f44336;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 服务器连接状态 -->
+    <div class="server-status" id="server-status">
+        <span class="status-indicator"></span>
+        <span class="status-text">服务器，连接成功</span>
+    </div>
+    
+    <div class="join-container">
+        <h1>加入我们</h1>
+        <p>请填写以下信息，我们会尽快与您联系</p>
+        
+        <div class="announcement">
+            <h3>公告</h3>
+            <ul>
+                <li>先提交信息之后加入QQ群</li>
+                <li>提交信息后找董事长进入打手群</li>
+                <li>加入俱乐部需交5块钱押金</li>
+                <li>需要考核，条件：双人单人需要杀三个人</li>
+            </ul>
+        </div>
+        
+        <div class="qq-group-join">
+            <h3>加入俱乐部QQ群</h3>
+            <div class="qq-group-info">
+                <div class="qq-qr-code">
+                    <img src="/JLBQQQ.jpg" alt="俱乐部QQ群二维码" style="width: 200px; height: 200px; object-fit: contain;">
+                </div>
+                <div class="qq-group-details">
+                    <p>QQ群号：217891046</p>
+                    <a href="mqqapi://group/join?groupid=217891046" class="btn btn-qq">加入群聊</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <form id="join-form">
+                <div class="form-group">
+                    <label for="qq">QQ号：</label>
+                    <input type="text" id="qq" name="qq" placeholder="请输入您的QQ号">
+                </div>
+                
+                <div class="form-group">
+                    <label for="wechat">微信号：</label>
+                    <input type="text" id="wechat" name="wechat" placeholder="请输入您的微信号">
+                </div>
+                
+                <div class="form-group">
+                    <label for="other">其他联系方式：</label>
+                    <textarea id="other" name="other" placeholder="请输入其他联系方式"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">留言：</label>
+                    <textarea id="message" name="message" placeholder="请输入您的留言"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-submit">提交</button>
+            </form>
+            
+            <div id="response-message"></div>
+        </div>
+        
+        <a href="index.html" class="btn btn-back">返回首页</a>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>

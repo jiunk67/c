@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>付款页面</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 服务器连接状态 */
+        .server-status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            animation: pulse 2s infinite;
+        }
+
+        .server-status.offline {
+            color: #f44336;
+        }
+
+        .server-status.offline .status-indicator {
+            background-color: #f44336;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 服务器连接状态 -->
+    <div class="server-status" id="server-status">
+        <span class="status-indicator"></span>
+        <span class="status-text">服务器，连接成功</span>
+    </div>
+    
+    <div class="payment-container">
+        <h1>付款页面</h1>
+        <p>请扫描下方二维码进行付款</p>
+        
+        <div class="payment-info">
+            <div class="qr-code">
+                <img src="/FK.PNG" alt="收款码" style="width: 100%; height: 100%; object-fit: contain;">
+            </div>
+            
+            <h2>付款说明</h2>
+            <p>1. 请使用微信或支付宝扫描上方收款码</p>
+            <p>2. 输入正确的金额</p>
+            <p>3. 付款后请保留付款凭证</p>
+            <p>4. 付款完成后请联系客服确认</p>
+            <p>5. 将支付成功的截图发到QQ群里面，QQ群往下翻</p>
+            
+            <div class="payment-rules">
+                <h3>俱乐部分钱规则</h3>
+                <ul>
+                    <li>董事长收1%</li>
+                    <li>其余归打手所有</li>
+                    <li>所有分配将在项目完成后24小时内结算</li>
+                </ul>
+            </div>
+            
+            <div class="qq-group">
+                <h3>加入俱乐部QQ群</h3>
+                <div class="qq-group-info">
+                    <div class="qq-qr-code">
+                        <img src="/JLBQQQ.jpg" alt="俱乐部QQ群二维码" style="width: 200px; height: 200px; object-fit: contain;">
+                    </div>
+                    <div class="qq-group-details">
+                        <p>QQ群号：217891046</p>
+                        <a href="mqqapi://group/join?groupid=217891046" class="btn btn-qq">加入群聊</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <a href="index.html" class="btn btn-back">返回首页</a>
+    </div>
+    <script src="js/script.js"></script>
+</body>
+</html>
