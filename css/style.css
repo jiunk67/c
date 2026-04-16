@@ -3,7 +3,7 @@ body {font-family: 'Arial', sans-serif;background-color: white;color: #333;line-
 
 /* 为非欢迎页面添加背景图片 */
 .payment-container, .projects-container, .join-container {
-    background-image: url('../TP.PNG');
+    background-image: url('../tp.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
