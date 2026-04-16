@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             
             // 发送邮件请求
-            fetch('http://192.168.1.68:3004/send-email', {
+            fetch('https://c-piqm.onrender.com/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -164,7 +164,7 @@ if (joinForm) {
         };
         
         // 发送邮件请求
-        fetch('http://192.168.1.68:3004/send-join-request', {
+        fetch('https://c-piqm.onrender.com/send-join-request', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -270,7 +270,7 @@ function checkServerStatus() {
     if (!serverStatus) return;
     
     // 尝试连接服务器
-    fetch('http://192.168.1.68:3004')
+    fetch('https://c-piqm.onrender.com')
         .then(response => {
             // 连接成功
             serverStatus.classList.remove('offline');

@@ -5,7 +5,7 @@ const cors = require('cors');
 const fs = require('fs');
 
 const app = express();
-const port = 3004;
+const port = process.env.PORT || 3004;
 
 // 读取YX.TXT文件中的邮箱地址
 function getEmailList() {
@@ -142,6 +142,6 @@ app.post('/send-join-request', (req, res) => {
 });
 
 // 启动服务器
-app.listen(port, '192.168.1.68', () => {
-    console.log(`服务器运行在 http://192.168.1.68:${port}`);
+app.listen(port, () => {
+    console.log(`服务器运行在 https://c-piqm.onrender.com:${port}`);
 });
