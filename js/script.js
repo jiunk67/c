@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // 过滤出一分钟内的提交记录
             const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
             
-            if (recentRecords.length >= 5) {
-                showMessage('提交过于频繁，请一分钟后再试', 'error');
+            if (recentRecords.length >= 1) {
+                showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
                 return;
             }
             
@@ -88,13 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.text())
             .then(data => {
                 if (data === '邮件发送成功') {
-                    showMessage('订单已提交，邮件发送成功', 'success');
-                    // 跳转到付款码页面
-                    setTimeout(() => {
-                        window.location.href = 'payment.html';
-                    }, 1500);
+                    showPopup('订单提交成功，请注意游戏账号打手邀请提醒，先不要付款，等待打手邀请之后，再问打手哪个收款码是他本人再进行付款');
                 } else {
-                    showMessage('邮件发送失败，请稍后重试', 'error');
+                    showMessage('失败，请稍后重试', 'error');
                 }
             })
             .catch(error => {
@@ -126,6 +122,55 @@ function showMessage(text, type) {
     }
 }
 
+// 显示弹窗函数
+function showPopup(text) {
+    // 创建弹窗元素
+    const popup = document.createElement('div');
+    popup.className = 'popup-overlay';
+    popup.innerHTML = `
+        <div class="popup-content">
+            <p>${text}</p>
+            <button class="btn btn-primary" onclick="this.parentElement.parentElement.remove()">确定</button>
+        </div>
+    `;
+    
+    // 添加到页面
+    document.body.appendChild(popup);
+    
+    // 添加弹窗样式
+    const style = document.createElement('style');
+    style.textContent = `
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .popup-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .popup-content p {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
 // 加入我们表单提交功能
 const joinForm = document.getElementById('join-form');
 if (joinForm) {
@@ -145,8 +190,8 @@ if (joinForm) {
         // 过滤出一分钟内的提交记录
         const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
         
-        if (recentRecords.length >= 5) {
-            showMessage('提交过于频繁，请一分钟后再试', 'error');
+        if (recentRecords.length >= 1) {
+            showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
             return;
         }
         
