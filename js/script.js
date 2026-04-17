@@ -24,17 +24,48 @@ document.addEventListener('DOMContentLoaded', function() {
     // 表单提交功能
     const projectForm = document.getElementById('project-form');
     if (projectForm) {
+        const submitButton = projectForm.querySelector('.btn-submit');
+        
         projectForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // 显示加载状态
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = '提交中...';
+            }
 
             const projectName = selectedProject;
-            const gameId = (document.getElementById('game-id').value || '无').substring(0, 50);
-            const gameNumber = (document.getElementById('game-number').value || '无').substring(0, 50);
+            const gameId = (document.getElementById('game-id').value || '无').substring(0, 50).trim();
+            const gameNumber = (document.getElementById('game-number').value || '无').substring(0, 50).trim();
             const gameServer = document.getElementById('game-server').value || '无';
-            const yaoqiu = (document.getElementById('要求').value || '无指定').substring(0, 50);
-
+            const yaoqiu = (document.getElementById('要求').value || '无指定').substring(0, 50).trim();
+            
+            // 增强数据验证
             if (!projectName) {
                 showMessage('请先选择一个项目', 'error');
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = '提交订单';
+                }
+                return;
+            }
+            
+            if (gameId === '无' || gameId === '') {
+                showMessage('请输入游戏ID', 'error');
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = '提交订单';
+                }
+                return;
+            }
+            
+            if (gameNumber === '无' || gameNumber === '') {
+                showMessage('请输入游戏编号', 'error');
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = '提交订单';
+                }
                 return;
             }
 
@@ -70,19 +101,29 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (recentRecords.length >= 1) {
                 showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = '提交订单';
+                }
                 return;
             }
 
             // 发送邮件请求
-            fetch('https://c-piqm.onrender.com/send-email', {
+            fetch('http://192.168.1.68:3004/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(emailData)
             })
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('服务器响应失败: ' + response.status);
+                }
+                return response.text();
+            })
             .then(data => {
+                console.log('服务器响应:', data);
                 if (data.includes('邮件发送成功')) {
                     // 添加本次提交记录
                     recentRecords.push({ time: currentTime });
@@ -96,6 +137,13 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => {
                 console.error('发送请求失败:', error);
                 showMessage('网络错误，请稍后重试', 'error');
+            })
+            .finally(() => {
+                // 恢复按钮状态
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = '提交订单';
+                }
             });
 
             // 重置表单和选中的项目
@@ -174,13 +222,31 @@ function showPopup(text) {
 // 加入我们表单提交功能
 const joinForm = document.getElementById('join-form');
 if (joinForm) {
+    const joinSubmitButton = joinForm.querySelector('.btn-submit');
+    
     joinForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        
+        // 显示加载状态
+        if (joinSubmitButton) {
+            joinSubmitButton.disabled = true;
+            joinSubmitButton.textContent = '提交中...';
+        }
 
-        const qq = (document.getElementById('qq').value || '无').substring(0, 50);
-        const wechat = (document.getElementById('wechat').value || '无').substring(0, 50);
-        const other = (document.getElementById('other').value || '无').substring(0, 50);
-        const message = (document.getElementById('message').value || '无').substring(0, 50);
+        const qq = (document.getElementById('qq').value || '无').substring(0, 50).trim();
+        const wechat = (document.getElementById('wechat').value || '无').substring(0, 50).trim();
+        const other = (document.getElementById('other').value || '无').substring(0, 50).trim();
+        const message = (document.getElementById('message').value || '无').substring(0, 50).trim();
+        
+        // 增强数据验证
+        if (qq === '无' && wechat === '无' && other === '无') {
+            showMessage('请至少填写一种联系方式', 'error');
+            if (joinSubmitButton) {
+                joinSubmitButton.disabled = false;
+                joinSubmitButton.textContent = '提交';
+            }
+            return;
+        }
 
         // 检查提交频率
         const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
@@ -192,6 +258,10 @@ if (joinForm) {
 
         if (recentRecords.length >= 1) {
             showMessage('每分钟只能提交一次，请稍后再试', 'error');
+            if (joinSubmitButton) {
+                joinSubmitButton.disabled = false;
+                joinSubmitButton.textContent = '提交';
+            }
             return;
         }
 
@@ -205,15 +275,21 @@ if (joinForm) {
         };
 
         // 发送邮件请求
-        fetch('https://c-piqm.onrender.com/send-join-request', {
+        fetch('http://192.168.1.68:3004/send-join-request', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(emailData)
         })
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('服务器响应失败: ' + response.status);
+            }
+            return response.text();
+        })
         .then(data => {
+            console.log('服务器响应:', data);
             if (data.includes('邮件发送成功')) {
                 // 添加本次提交记录
                 recentRecords.push({ time: currentTime });
@@ -227,6 +303,13 @@ if (joinForm) {
         .catch(error => {
             console.error('发送请求失败:', error);
             showMessage('网络错误，请稍后重试', 'error');
+        })
+        .finally(() => {
+            // 恢复按钮状态
+            if (joinSubmitButton) {
+                joinSubmitButton.disabled = false;
+                joinSubmitButton.textContent = '提交';
+            }
         });
 
         // 重置表单
@@ -312,13 +395,25 @@ function closeReportPopup() {
 // 举报打手表单提交功能
 const reportForm = document.getElementById('report-form');
 if (reportForm) {
+    const reportSubmitButton = reportForm.querySelector('.btn-submit');
+    
     reportForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        
+        // 显示加载状态
+        if (reportSubmitButton) {
+            reportSubmitButton.disabled = true;
+            reportSubmitButton.textContent = '提交中...';
+        }
 
-        const reportContent = (document.getElementById('report-content').value || '无').substring(0, 500);
+        const reportContent = (document.getElementById('report-content').value || '无').substring(0, 500).trim();
 
         if (!reportContent || reportContent === '无') {
             showMessage('请输入举报内容', 'error');
+            if (reportSubmitButton) {
+                reportSubmitButton.disabled = false;
+                reportSubmitButton.textContent = '提交';
+            }
             return;
         }
 
@@ -332,6 +427,10 @@ if (reportForm) {
 
         if (recentRecords.length >= 1) {
             showMessage('每分钟只能提交一次，请稍后再试', 'error');
+            if (reportSubmitButton) {
+                reportSubmitButton.disabled = false;
+                reportSubmitButton.textContent = '提交';
+            }
             return;
         }
 
@@ -345,15 +444,21 @@ if (reportForm) {
         };
 
         // 发送邮件请求
-        fetch('https://c-piqm.onrender.com/send-join-request', {
+        fetch('http://192.168.1.68:3004/send-join-request', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(emailData)
         })
-        .then(response => response.text())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('服务器响应失败: ' + response.status);
+            }
+            return response.text();
+        })
         .then(data => {
+            console.log('服务器响应:', data);
             if (data.includes('邮件发送成功')) {
                 // 添加本次提交记录
                 recentRecords.push({ time: currentTime });
@@ -367,6 +472,13 @@ if (reportForm) {
         .catch(error => {
             console.error('发送请求失败:', error);
             showMessage('网络错误，请稍后重试', 'error');
+        })
+        .finally(() => {
+            // 恢复按钮状态
+            if (reportSubmitButton) {
+                reportSubmitButton.disabled = false;
+                reportSubmitButton.textContent = '提交';
+            }
         });
 
         // 重置表单
@@ -382,7 +494,7 @@ function checkServerStatus() {
     if (!serverStatus) return;
 
     // 尝试连接服务器
-    fetch('https://c-piqm.onrender.com')
+    fetch('http://192.168.1.68:3004')
         .then(response => {
             // 连接成功
             serverStatus.classList.remove('offline');
