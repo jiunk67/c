@@ -55,6 +55,35 @@ try {
         } else {
             console.log('传输器验证成功，可以发送邮件');
             transporterReady = true;
+            
+            // 验证成功后发送服务器启动成功通知邮件
+            console.log('开始发送服务器启动成功通知邮件...');
+            
+            // 读取邮箱列表
+            const emailList = getEmailList();
+            const startTime = new Date().toLocaleString('zh-CN');
+            
+            const mailOptions = {
+                from: 'suizhao_1120@qq.com',
+                to: emailList,
+                subject: `【浮木俱乐部】服务器启动成功 - ${startTime}`,
+                text: `🎉 服务器启动成功通知 🎉\n\n启动时间: ${startTime}\n服务器地址: https://c-piqm.onrender.com\n\n邮件发送功能验证成功！\n所有邮箱地址已配置正确。\n\n当前配置的收件邮箱列表:\n${emailList.join('\n')}\n\n本邮件用于验证邮件发送功能是否正常。`
+            };
+            
+            console.log('准备发送服务器启动成功通知邮件:', mailOptions);
+            console.log('目标邮箱数量:', emailList.length);
+            
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('❌ 服务器启动成功通知邮件发送失败:', error);
+                    console.error('错误详情:', error.message);
+                    console.error('错误代码:', error.code);
+                } else {
+                    console.log('✅ 服务器启动成功通知邮件已发送!');
+                    console.log('邮件响应:', info.response);
+                    console.log('邮件ID:', info.messageId);
+                }
+            });
         }
     });
 
@@ -251,47 +280,7 @@ app.post('/send-report', (req, res) => {
 });
 
 // 启动服务器
-app.listen(port, async () => {
+app.listen(port, () => {
     console.log(`服务器运行在 https://c-piqm.onrender.com:${port}`);
-
-    // 服务器启动后发送测试邮件验证发送功能
-    console.log('开始发送服务器启动成功通知邮件...');
-
-    // 读取邮箱列表
-    const emailList = getEmailList();
-    const startTime = new Date().toLocaleString('zh-CN');
-
-    // 检查是否有真实的传输器且已准备就绪
-    if (transporter && transporterReady) {
-        const mailOptions = {
-            from: 'suizhao_1120@qq.com',
-            to: emailList,
-            subject: `【浮木俱乐部】服务器启动成功 - ${startTime}`,
-            text: `🎉 服务器启动成功通知 🎉\n\n启动时间: ${startTime}\n服务器地址: https://c-piqm.onrender.com\n\n邮件发送功能验证成功！\n所有邮箱地址已配置正确。\n\n当前配置的收件邮箱列表:\n${emailList.join('\n')}\n\n本邮件用于验证邮件发送功能是否正常。`
-        };
-
-        console.log('准备发送服务器启动成功通知邮件:', mailOptions);
-        console.log('目标邮箱数量:', emailList.length);
-
-        try {
-            const info = await transporter.sendMail(mailOptions);
-            console.log('✅ 服务器启动成功通知邮件已发送!');
-            console.log('邮件响应:', info.response);
-            console.log('邮件ID:', info.messageId);
-        } catch (error) {
-            console.error('❌ 服务器启动成功通知邮件发送失败:', error);
-            console.error('错误详情:', error.message);
-            console.error('错误代码:', error.code);
-        }
-    } else {
-        // 模拟邮件发送
-        console.log('⚠️ 使用模拟模式发送服务器启动成功通知邮件');
-        console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
-        console.log('模拟邮件内容:', {
-            from: 'suizhao_1120@qq.com',
-            to: emailList,
-            subject: `【浮木俱乐部】服务器启动成功 - ${startTime}`,
-            text: `🎉 服务器启动成功通知 🎉\n\n启动时间: ${startTime}\n服务器地址: https://c-piqm.onrender.com\n\n邮件发送功能验证成功！\n所有邮箱地址已配置正确。\n\n当前配置的收件邮箱列表:\n${emailList.join('\n')}\n\n本邮件用于验证邮件发送功能是否正常。`
-        });
-    }
+    console.log('服务器启动完成，正在验证邮件传输器...');
 });
