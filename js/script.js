@@ -337,15 +337,11 @@ if (reportForm) {
         
         // 构建邮件数据
         const emailData = {
-            type: '举报打手',
-            qq: '无',
-            wechat: '无',
-            other: '无',
             message: reportContent
         };
         
         // 发送邮件请求
-        fetch('https://c-piqm.onrender.com/send-join-request', {
+        fetch('https://c-piqm.onrender.com/send-report', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
