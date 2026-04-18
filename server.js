@@ -34,7 +34,7 @@ try {
         secure: true,
         auth: {
             user: 'suizhao_1120@qq.com',
-            pass: 'wlnudpveossfdfhd'
+            pass: 'kqnojhetaiehgjbg'
         }
     });
     
@@ -106,6 +106,9 @@ app.post('/send-join-request', (req, res) => {
     // 读取邮箱列表
     const emailList = getEmailList();
     
+    console.log('=============================================');
+    console.log('📢 新的服务申请加入通知');
+    console.log('=============================================');
     console.log('收到加入请求:', {
         qq,
         wechat,
@@ -113,6 +116,7 @@ app.post('/send-join-request', (req, res) => {
         message,
         to: emailList
     });
+    console.log('=============================================');
     
     // 检查是否有真实的传输器
     if (transporter) {
