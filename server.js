@@ -114,7 +114,7 @@ app.post('/send-email', (req, res) => {
             from: 'suizhao_1120@qq.com',
             to: emailList,
             subject: `俱乐部订单 - ${projectName}`,
-            text: `提交时间: ${time}\n项目: ${projectName}\n价格: ${projectPrice}\n订单描述: ${projectDescription}\n游戏ID: ${gameId}\n游戏编号: ${gameNumber}\n游戏区服: ${gameServer}\n其他要求: ${要求}\n\n打手抢单规则:\n1. 订单会发到所有人的邮箱里，谁先邀请老板这个单就属于是谁抢的\n2. 可以选择三个人护一个老板，价格进行平均分\n3. 要保留你护航老板的证据，提交给董事长即可给钱\n4. 邀请老板后，请到群聊查看老板是否已经付款\n5. 注意注意，一定要先问老板是否付款\n6. 可以到QQ群内确认，若老板没有发截图，请要求老板加群后发截图\n7. 订单内的翻车单类，若发现老板故意送人头，可在群聊内投诉，董事长验证后可不完单\n8. QQ群号：217891046`
+            text: `提交时间: ${time}\n项目: ${projectName}\n价格: ${projectPrice}\n订单描述: ${projectDescription}\n游戏ID: ${gameId}\n游戏编号: ${gameNumber}\n游戏区服: ${gameServer}\n其他要求: ${要求}`
         };
         
         console.log('准备发送邮件:', mailOptions);
