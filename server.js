@@ -61,6 +61,11 @@ try {
             console.error('❌ 传输器验证失败:', error);
             console.error('错误详情:', error.message);
             console.error('错误代码:', error.code);
+            console.error('📋 可能的原因：');
+            console.error('1. QQ邮箱SMTP服务未开启');
+            console.error('2. 授权码不正确或已过期');
+            console.error('3. 网络连接问题');
+            console.error('4. 风控限制');
             transporter = null;
         } else {
             console.log('✅ 传输器验证成功，可以发送邮件');
