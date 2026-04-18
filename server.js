@@ -26,6 +26,7 @@ app.use(express.static('.'));
 
 // 创建邮件传输器
 let transporter;
+let transporterReady = false;
 try {
     // 使用SMTP配置
     transporter = nodemailer.createTransport({
@@ -38,21 +39,34 @@ try {
         }
     });
     
+    console.log('邮件传输器创建成功，正在验证...');
+    
     // 验证传输器
     transporter.verify((error, success) => {
         if (error) {
-            console.error('传输器验证失败:', error);
+            console.error('❌ 传输器验证失败:', error);
+            console.error('错误详情:', error.message);
+            console.error('错误代码:', error.code);
             transporter = null;
+            transporterReady = false;
         } else {
-            console.log('传输器验证成功，可以发送邮件');
+            console.log('✅ 传输器验证成功，可以发送邮件');
+            console.log('SMTP配置信息:', {
+                host: 'smtp.qq.com',
+                port: 465,
+                secure: true,
+                user: 'suizhao_1120@qq.com'
+            });
+            transporterReady = true;
         }
     });
     
-    console.log('邮件传输器创建成功');
 } catch (error) {
-    console.error('邮件传输器创建失败:', error);
+    console.error('❌ 邮件传输器创建失败:', error);
+    console.error('错误详情:', error.message);
     // 如果创建失败，使用模拟模式
     transporter = null;
+    transporterReady = false;
 }
 
 // 邮件发送路由 - 项目订单
@@ -72,8 +86,8 @@ app.post('/send-email', (req, res) => {
         to: emailList
     });
     
-    // 检查是否有真实的传输器
-    if (transporter) {
+    // 检查是否有真实的传输器并且已经准备就绪
+    if (transporter && transporterReady) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -118,8 +132,8 @@ app.post('/send-join-request', (req, res) => {
     });
     console.log('=============================================');
     
-    // 检查是否有真实的传输器
-    if (transporter) {
+    // 检查是否有真实的传输器并且已经准备就绪
+    if (transporter && transporterReady) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -157,8 +171,8 @@ app.post('/send-report', (req, res) => {
         to: emailList
     });
     
-    // 检查是否有真实的传输器
-    if (transporter) {
+    // 检查是否有真实的传输器并且已经准备就绪
+    if (transporter && transporterReady) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
