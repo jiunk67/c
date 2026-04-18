@@ -14,7 +14,7 @@ function getEmailList() {
         return data.split('\n').filter(email => email.trim() !== '');
     } catch (error) {
         console.error('读取YX.txt文件失败:', error);
-        return ['2665997116@qq.com']; // 默认邮箱
+        return ['2665997116@qq.com'];
     }
 }
 
@@ -27,7 +27,6 @@ app.use(express.static('.'));
 // 创建邮件传输器
 let transporter;
 try {
-    // 使用SMTP配置
     transporter = nodemailer.createTransport({
         host: 'smtp.qq.com',
         port: 465,
@@ -38,7 +37,6 @@ try {
         }
     });
 
-    // 验证传输器
     transporter.verify((error, success) => {
         if (error) {
             console.error('传输器验证失败:', error);
@@ -51,7 +49,6 @@ try {
     console.log('邮件传输器创建成功');
 } catch (error) {
     console.error('邮件传输器创建失败:', error);
-    // 如果创建失败，使用模拟模式
     transporter = null;
 }
 
@@ -59,7 +56,6 @@ try {
 app.post('/send-email', (req, res) => {
     const { projectName, projectPrice, projectDescription, gameId, gameNumber, gameServer, 要求, time } = req.body;
 
-    // 读取邮箱列表
     const emailList = getEmailList();
 
     console.log('收到订单:', {
@@ -72,7 +68,6 @@ app.post('/send-email', (req, res) => {
         to: emailList
     });
 
-    // 检查是否有真实的传输器
     if (transporter) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
@@ -93,7 +88,6 @@ app.post('/send-email', (req, res) => {
             }
         });
     } else {
-        // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
         res.status(200).send('邮件发送成功（模拟）');
     }
@@ -103,7 +97,6 @@ app.post('/send-email', (req, res) => {
 app.post('/send-join-request', (req, res) => {
     const { qq, wechat, other, message } = req.body;
 
-    // 读取邮箱列表
     const emailList = getEmailList();
 
     console.log('收到加入请求:', {
@@ -114,7 +107,6 @@ app.post('/send-join-request', (req, res) => {
         to: emailList
     });
 
-    // 检查是否有真实的传输器
     if (transporter) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
@@ -135,7 +127,6 @@ app.post('/send-join-request', (req, res) => {
             }
         });
     } else {
-        // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
         res.status(200).send('邮件发送成功（模拟）');
     }
@@ -145,7 +136,6 @@ app.post('/send-join-request', (req, res) => {
 app.post('/send-report', (req, res) => {
     const { message } = req.body;
 
-    // 读取邮箱列表
     const emailList = getEmailList();
 
     console.log('收到举报请求:', {
@@ -153,7 +143,6 @@ app.post('/send-report', (req, res) => {
         to: emailList
     });
 
-    // 检查是否有真实的传输器
     if (transporter) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
@@ -174,7 +163,6 @@ app.post('/send-report', (req, res) => {
             }
         });
     } else {
-        // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
         res.status(200).send('邮件发送成功（模拟）');
     }
