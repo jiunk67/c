@@ -121,7 +121,14 @@ app.post('/send-email', (req, res) => {
         // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
         console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
+        // 发送模拟成功响应，但在控制台显示详细信息
         res.status(200).send('邮件发送成功（模拟）');
+        console.log('模拟邮件内容:', {
+            from: 'suizhao_1120@qq.com',
+            to: emailList,
+            subject: `俱乐部订单 - ${safeProjectName}`,
+            text: `提交时间: ${safeTime}\n项目: ${safeProjectName}\n价格: ${safeProjectPrice}\n订单描述: ${safeProjectDescription}\n游戏ID: ${safeGameId}\n游戏编号: ${safeGameNumber}\n游戏区服: ${safeGameServer}\n其他要求: ${safeYaoqiu}`
+        });
     }
 });
 
@@ -182,7 +189,14 @@ app.post('/send-join-request', (req, res) => {
         // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
         console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
+        // 发送模拟成功响应，但在控制台显示详细信息
         res.status(200).send('邮件发送成功（模拟）');
+        console.log('模拟邮件内容:', {
+            from: 'suizhao_1120@qq.com',
+            to: emailList,
+            subject: subject,
+            text: emailText
+        });
     }
 });
 
@@ -225,11 +239,82 @@ app.post('/send-report', (req, res) => {
         // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
         console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
+        // 发送模拟成功响应，但在控制台显示详细信息
         res.status(200).send('邮件发送成功（模拟）');
+        console.log('模拟邮件内容:', {
+            from: 'suizhao_1120@qq.com',
+            to: emailList,
+            subject: '打手举报通知',
+            text: message
+        });
     }
 });
 
 // 启动服务器
 app.listen(port, () => {
     console.log(`服务器运行在 https://c-piqm.onrender.com:${port}`);
+    
+    // 服务器启动后发送测试邮件验证发送功能
+    setTimeout(() => {
+        console.log('开始发送测试邮件验证邮件发送功能...');
+        
+        // 读取邮箱列表
+        const emailList = getEmailList();
+        
+        // 构建测试邮件数据
+        const testMailData = {
+            projectName: '测试项目',
+            projectPrice: '0',
+            projectDescription: '服务器启动测试邮件',
+            gameId: 'test',
+            gameNumber: 'test',
+            gameServer: 'test',
+            要求: '无',
+            time: new Date().toLocaleString('zh-CN')
+        };
+        
+        // 为字段添加默认值
+        const safeProjectName = testMailData.projectName || '未指定项目';
+        const safeProjectPrice = testMailData.projectPrice || '未指定价格';
+        const safeProjectDescription = testMailData.projectDescription || '无描述';
+        const safeGameId = testMailData.gameId || '无';
+        const safeGameNumber = testMailData.gameNumber || '无';
+        const safeGameServer = testMailData.gameServer || '无';
+        const safeYaoqiu = testMailData.要求 || '无指定';
+        const safeTime = testMailData.time || new Date().toLocaleString('zh-CN');
+        
+        // 检查是否有真实的传输器且已准备就绪
+        if (transporter && transporterReady) {
+            const mailOptions = {
+                from: 'suizhao_1120@qq.com',
+                to: emailList,
+                subject: `服务器启动测试 - ${safeProjectName}`,
+                text: `提交时间: ${safeTime}\n项目: ${safeProjectName}\n价格: ${safeProjectPrice}\n订单描述: ${safeProjectDescription}\n游戏ID: ${safeGameId}\n游戏编号: ${safeGameNumber}\n游戏区服: ${safeGameServer}\n其他要求: ${safeYaoqiu}\n\n这是服务器启动时发送的测试邮件，用于验证邮件发送功能是否正常。`
+            };
+            
+            console.log('准备发送测试邮件:', mailOptions);
+            
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('测试邮件发送失败:', error);
+                    console.error('错误详情:', error.message);
+                    console.error('错误代码:', error.code);
+                } else {
+                    console.log('测试邮件已发送:', info.response);
+                    console.log('测试邮件ID:', info.messageId);
+                    console.log('邮件发送功能验证成功！');
+                }
+            });
+        } else {
+            // 模拟邮件发送
+            console.log('使用模拟模式发送测试邮件');
+            console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
+            console.log('模拟邮件内容:', {
+                from: 'suizhao_1120@qq.com',
+                to: emailList,
+                subject: `服务器启动测试 - ${safeProjectName}`,
+                text: `提交时间: ${safeTime}\n项目: ${safeProjectName}\n价格: ${safeProjectPrice}\n订单描述: ${safeProjectDescription}\n游戏ID: ${safeGameId}\n游戏编号: ${safeGameNumber}\n游戏区服: ${safeGameServer}\n其他要求: ${safeYaoqiu}\n\n这是服务器启动时发送的测试邮件，用于验证邮件发送功能是否正常。`
+            });
+        }
+    }, 3000); // 延迟3秒发送，确保传输器有足够时间完成验证
 });

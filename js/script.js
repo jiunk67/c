@@ -96,8 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(error => {
             console.error('发送请求失败:', error);
             showMessage('网络错误，请稍后重试', 'error');
-        });
-            
+        })
+        .finally(() => {
             // 重置表单和选中的项目
             setTimeout(() => {
                 projectForm.reset();
