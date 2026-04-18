@@ -29,6 +29,7 @@ app.use(express.static('.'));
 
 // 创建邮件传输器
 let transporter;
+let transporterReady = false;
 try {
     // 使用SMTP配置
     transporter = nodemailer.createTransport({
@@ -50,8 +51,10 @@ try {
             console.error('错误详情:', error.message);
             console.error('错误代码:', error.code);
             transporter = null;
+            transporterReady = false;
         } else {
             console.log('传输器验证成功，可以发送邮件');
+            transporterReady = true;
         }
     });
     
@@ -61,6 +64,7 @@ try {
     console.error('错误详情:', error.message);
     // 如果创建失败，使用模拟模式
     transporter = null;
+    transporterReady = false;
 }
 
 // 邮件发送路由 - 项目订单
@@ -90,8 +94,8 @@ app.post('/send-email', (req, res) => {
         to: emailList
     });
     
-    // 检查是否有真实的传输器
-    if (transporter) {
+    // 检查是否有真实的传输器且已准备就绪
+    if (transporter && transporterReady) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -116,6 +120,7 @@ app.post('/send-email', (req, res) => {
     } else {
         // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
+        console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
         res.status(200).send('邮件发送成功（模拟）');
     }
 });
@@ -150,8 +155,8 @@ app.post('/send-join-request', (req, res) => {
         console.log('设置为加入请求邮件:', subject, emailText);
     }
     
-    // 检查是否有真实的传输器
-    if (transporter) {
+    // 检查是否有真实的传输器且已准备就绪
+    if (transporter && transporterReady) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -176,6 +181,7 @@ app.post('/send-join-request', (req, res) => {
     } else {
         // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
+        console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
         res.status(200).send('邮件发送成功（模拟）');
     }
 });
@@ -192,8 +198,8 @@ app.post('/send-report', (req, res) => {
         to: emailList
     });
     
-    // 检查是否有真实的传输器
-    if (transporter) {
+    // 检查是否有真实的传输器且已准备就绪
+    if (transporter && transporterReady) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -218,6 +224,7 @@ app.post('/send-report', (req, res) => {
     } else {
         // 模拟邮件发送
         console.log('使用模拟模式发送邮件');
+        console.log('原因:', transporter ? '传输器未准备就绪' : '传输器未创建');
         res.status(200).send('邮件发送成功（模拟）');
     }
 });
