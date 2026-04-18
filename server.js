@@ -22,11 +22,25 @@ function getEmailList() {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('.'));
+
+// 静态文件服务 - 捕获所有HTML文件请求
+app.use(express.static('.', {
+    setHeaders: function (res, path, stat) {
+        if (path.endsWith('.html')) {
+            // 记录新的HTML连接
+            console.log('📡 新的HTML连接:', path);
+        }
+    }
+}));
+
+// 根路径请求
+app.get('/', (req, res) => {
+    console.log('📡 新的根路径连接');
+    res.sendFile(__dirname + '/welcome.html');
+});
 
 // 创建邮件传输器
 let transporter;
-let transporterReady = false;
 try {
     // 使用SMTP配置
     transporter = nodemailer.createTransport({
@@ -48,7 +62,6 @@ try {
             console.error('错误详情:', error.message);
             console.error('错误代码:', error.code);
             transporter = null;
-            transporterReady = false;
         } else {
             console.log('✅ 传输器验证成功，可以发送邮件');
             console.log('SMTP配置信息:', {
@@ -57,7 +70,6 @@ try {
                 secure: true,
                 user: 'suizhao_1120@qq.com'
             });
-            transporterReady = true;
         }
     });
     
@@ -66,7 +78,6 @@ try {
     console.error('错误详情:', error.message);
     // 如果创建失败，使用模拟模式
     transporter = null;
-    transporterReady = false;
 }
 
 // 邮件发送路由 - 项目订单
@@ -76,8 +87,13 @@ app.post('/send-email', (req, res) => {
     // 读取邮箱列表
     const emailList = getEmailList();
     
-    console.log('收到订单:', {
+    console.log('=============================================');
+    console.log('📧 收到订单请求');
+    console.log('=============================================');
+    console.log('订单详情:', {
         projectName,
+        projectPrice,
+        projectDescription,
         gameId,
         gameNumber,
         gameServer,
@@ -85,9 +101,10 @@ app.post('/send-email', (req, res) => {
         time,
         to: emailList
     });
+    console.log('=============================================');
     
-    // 检查是否有真实的传输器并且已经准备就绪
-    if (transporter && transporterReady) {
+    // 检查是否有真实的传输器
+    if (transporter) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -99,16 +116,19 @@ app.post('/send-email', (req, res) => {
         
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.error('邮件发送失败:', error);
+                console.error('❌ 邮件发送失败:', error);
+                console.error('错误详情:', error.message);
+                console.error('错误代码:', error.code);
                 res.status(500).send('邮件发送失败: ' + error.message);
             } else {
-                console.log('邮件已发送:', info.response);
+                console.log('✅ 邮件已发送:', info.response);
+                console.log('邮件ID:', info.messageId);
                 res.status(200).send('邮件发送成功');
             }
         });
     } else {
         // 模拟邮件发送
-        console.log('使用模拟模式发送邮件');
+        console.log('⚠️  使用模拟模式发送邮件');
         res.status(200).send('邮件发送成功（模拟）');
     }
 });
@@ -121,9 +141,9 @@ app.post('/send-join-request', (req, res) => {
     const emailList = getEmailList();
     
     console.log('=============================================');
-    console.log('📢 新的服务申请加入通知');
+    console.log('� 收到加入请求');
     console.log('=============================================');
-    console.log('收到加入请求:', {
+    console.log('加入请求详情:', {
         qq,
         wechat,
         other,
@@ -132,8 +152,8 @@ app.post('/send-join-request', (req, res) => {
     });
     console.log('=============================================');
     
-    // 检查是否有真实的传输器并且已经准备就绪
-    if (transporter && transporterReady) {
+    // 检查是否有真实的传输器
+    if (transporter) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -145,16 +165,19 @@ app.post('/send-join-request', (req, res) => {
         
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.error('邮件发送失败:', error);
+                console.error('❌ 邮件发送失败:', error);
+                console.error('错误详情:', error.message);
+                console.error('错误代码:', error.code);
                 res.status(500).send('邮件发送失败: ' + error.message);
             } else {
-                console.log('邮件已发送:', info.response);
+                console.log('✅ 邮件已发送:', info.response);
+                console.log('邮件ID:', info.messageId);
                 res.status(200).send('邮件发送成功');
             }
         });
     } else {
         // 模拟邮件发送
-        console.log('使用模拟模式发送邮件');
+        console.log('⚠️  使用模拟模式发送邮件');
         res.status(200).send('邮件发送成功（模拟）');
     }
 });
@@ -166,13 +189,17 @@ app.post('/send-report', (req, res) => {
     // 读取邮箱列表
     const emailList = getEmailList();
     
-    console.log('收到举报请求:', {
+    console.log('=============================================');
+    console.log('📧 收到举报请求');
+    console.log('=============================================');
+    console.log('举报请求详情:', {
         message,
         to: emailList
     });
+    console.log('=============================================');
     
-    // 检查是否有真实的传输器并且已经准备就绪
-    if (transporter && transporterReady) {
+    // 检查是否有真实的传输器
+    if (transporter) {
         const mailOptions = {
             from: 'suizhao_1120@qq.com',
             to: emailList,
@@ -184,21 +211,27 @@ app.post('/send-report', (req, res) => {
         
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.error('邮件发送失败:', error);
+                console.error('❌ 邮件发送失败:', error);
+                console.error('错误详情:', error.message);
+                console.error('错误代码:', error.code);
                 res.status(500).send('邮件发送失败: ' + error.message);
             } else {
-                console.log('邮件已发送:', info.response);
+                console.log('✅ 邮件已发送:', info.response);
+                console.log('邮件ID:', info.messageId);
                 res.status(200).send('邮件发送成功');
             }
         });
     } else {
         // 模拟邮件发送
-        console.log('使用模拟模式发送邮件');
+        console.log('⚠️  使用模拟模式发送邮件');
         res.status(200).send('邮件发送成功（模拟）');
     }
 });
 
 // 启动服务器
 app.listen(port, () => {
-    console.log(`服务器运行在 https://c-piqm.onrender.com:${port}`);
+    console.log('=============================================');
+    console.log('🚀 服务器启动成功');
+    console.log('📡 服务器运行在 https://c-piqm.onrender.com:' + port);
+    console.log('=============================================');
 });
