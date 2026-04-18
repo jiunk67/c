@@ -40,9 +40,17 @@ try {
     transporter.verify((error, success) => {
         if (error) {
             console.error('传输器验证失败:', error);
+            console.error('错误详情:', error.message);
+            console.error('错误代码:', error.code);
             transporter = null;
         } else {
             console.log('传输器验证成功，可以发送邮件');
+            console.log('SMTP配置信息:', {
+                host: 'smtp.qq.com',
+                port: 465,
+                secure: true,
+                user: 'suizhao_1120@qq.com'
+            });
         }
     });
 
@@ -81,9 +89,13 @@ app.post('/send-email', (req, res) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.error('邮件发送失败:', error);
+                console.error('错误详情:', error.message);
+                console.error('错误代码:', error.code);
                 res.status(500).send('邮件发送失败: ' + error.message);
             } else {
                 console.log('邮件已发送:', info.response);
+                console.log('邮件ID:', info.messageId);
+                console.log('发送时间:', new Date().toLocaleString('zh-CN'));
                 res.status(200).send('邮件发送成功');
             }
         });
@@ -120,9 +132,13 @@ app.post('/send-join-request', (req, res) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.error('邮件发送失败:', error);
+                console.error('错误详情:', error.message);
+                console.error('错误代码:', error.code);
                 res.status(500).send('邮件发送失败: ' + error.message);
             } else {
                 console.log('邮件已发送:', info.response);
+                console.log('邮件ID:', info.messageId);
+                console.log('发送时间:', new Date().toLocaleString('zh-CN'));
                 res.status(200).send('邮件发送成功');
             }
         });
@@ -156,9 +172,13 @@ app.post('/send-report', (req, res) => {
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.error('邮件发送失败:', error);
+                console.error('错误详情:', error.message);
+                console.error('错误代码:', error.code);
                 res.status(500).send('邮件发送失败: ' + error.message);
             } else {
                 console.log('邮件已发送:', info.response);
+                console.log('邮件ID:', info.messageId);
+                console.log('发送时间:', new Date().toLocaleString('zh-CN'));
                 res.status(200).send('邮件发送成功');
             }
         });
