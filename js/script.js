@@ -5,104 +5,92 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectedProject = '';
     let selectedPrice = '';
     let selectedDescription = '';
-    
+
     if (projectItems.length > 0) {
         projectItems.forEach(item => {
             item.addEventListener('click', function() {
                 selectedProject = this.getAttribute('data-project');
-                // 获取项目价格
                 selectedPrice = this.querySelector('.price').textContent.replace('价格：', '');
-                // 获取项目描述
                 selectedDescription = this.getAttribute('data-description');
-                
-                // 滚动到表单
                 document.getElementById('order-form').scrollIntoView({ behavior: 'smooth' });
             });
         });
     }
-    
+
     // 表单提交功能
     const projectForm = document.getElementById('project-form');
     if (projectForm) {
         projectForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const projectName = selectedProject;
             const gameId = (document.getElementById('game-id').value || '无').substring(0, 50);
             const gameNumber = (document.getElementById('game-number').value || '无').substring(0, 50);
             const gameServer = document.getElementById('game-server').value || '无';
             const yaoqiu = (document.getElementById('要求').value || '无指定').substring(0, 50);
-            
+
             if (!projectName) {
                 showMessage('请先选择一个项目', 'error');
                 return;
             }
-            
-            // 获取当前时间
-        const formattedTime = new Date().toLocaleString('zh-CN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
-        });
-        
-        // 构建邮件数据
-        const emailData = {
-            projectName: projectName,
-            projectPrice: selectedPrice,
-            projectDescription: selectedDescription,
-            gameId: gameId,
-            gameNumber: gameNumber,
-            gameServer: gameServer,
-            要求: yaoqiu,
-            time: formattedTime
-        };
-        
-        // 检查提交频率
-        const submitRecords = JSON.parse(localStorage.getItem('submitRecords') || '[]');
-        const currentTime = Date.now();
-        const oneMinuteAgo = currentTime - 60 * 1000;
-        
-        // 过滤出一分钟内的提交记录
-        const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-        
-        if (recentRecords.length >= 1) {
-            showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
-            return;
-        }
-        
-        // 发送邮件请求
-        fetch('https://c-piqm.onrender.com/send-email', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(emailData)
-        })
-        .then(response => response.text())
-        .then(data => {
-            if (data.includes('邮件发送成功')) {
-                // 添加本次提交记录
-                recentRecords.push({ time: currentTime });
-                localStorage.setItem('submitRecords', JSON.stringify(recentRecords));
-                
-                showPopup('订单提交成功，请注意游戏账号打手邀请提醒，先不要付款，等待打手邀请之后，再问打手哪个收款码是他本人再进行付款');
-            } else {
-                showMessage('失败，请稍后重试', 'error');
+
+            const formattedTime = new Date().toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+
+            const emailData = {
+                projectName: projectName,
+                projectPrice: selectedPrice,
+                projectDescription: selectedDescription,
+                gameId: gameId,
+                gameNumber: gameNumber,
+                gameServer: gameServer,
+                要求: yaoqiu,
+                time: formattedTime
+            };
+
+            const submitRecords = JSON.parse(localStorage.getItem('submitRecords') || '[]');
+            const currentTime = Date.now();
+            const oneMinuteAgo = currentTime - 60 * 1000;
+            const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
+
+            if (recentRecords.length >= 1) {
+                showMessage('每分钟只能提交一次订单，请稍后再试', 'error');
+                return;
             }
-        })
-        .catch(error => {
-            console.error('发送请求失败:', error);
-            showMessage('网络错误，请稍后重试', 'error');
-        })
-        .finally(() => {
-            // 重置表单和选中的项目
-            setTimeout(() => {
-                projectForm.reset();
-                selectedProject = '';
-            }, 3000);
+
+            fetch('https://c-piqm.onrender.com/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(emailData)
+            })
+            .then(response => response.text())
+            .then(data => {
+                if (data.includes('邮件发送成功')) {
+                    recentRecords.push({ time: currentTime });
+                    localStorage.setItem('submitRecords', JSON.stringify(recentRecords));
+                    showPopup('订单提交成功，请注意游戏账号打手邀请提醒，先不要付款，等待打手邀请之后，再问打手哪个收款码是他本人再进行付款');
+                } else {
+                    showMessage('失败，请稍后重试', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('发送请求失败:', error);
+                showMessage('网络错误，请稍后重试', 'error');
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    projectForm.reset();
+                    selectedProject = '';
+                }, 3000);
+            });
         });
     }
 });
@@ -113,8 +101,6 @@ function showMessage(text, type) {
     if (messageDiv) {
         messageDiv.className = type === 'success' ? 'success-message' : 'error-message';
         messageDiv.textContent = text;
-        
-        // 3秒后隐藏消息
         setTimeout(() => {
             messageDiv.textContent = '';
             messageDiv.className = '';
@@ -124,7 +110,6 @@ function showMessage(text, type) {
 
 // 显示弹窗函数
 function showPopup(text) {
-    // 创建弹窗元素
     const popup = document.createElement('div');
     popup.className = 'popup-overlay';
     popup.innerHTML = `
@@ -133,11 +118,7 @@ function showPopup(text) {
             <button class="btn btn-primary" onclick="this.parentElement.parentElement.remove()">确定</button>
         </div>
     `;
-    
-    // 添加到页面
     document.body.appendChild(popup);
-    
-    // 添加弹窗样式
     const style = document.createElement('style');
     style.textContent = `
         .popup-overlay {
@@ -152,7 +133,6 @@ function showPopup(text) {
             justify-content: center;
             z-index: 1000;
         }
-        
         .popup-content {
             background-color: white;
             padding: 30px;
@@ -162,7 +142,6 @@ function showPopup(text) {
             max-width: 400px;
             width: 90%;
         }
-        
         .popup-content p {
             margin-bottom: 20px;
             font-size: 1.2rem;
@@ -176,26 +155,22 @@ const joinForm = document.getElementById('join-form');
 if (joinForm) {
     joinForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const qq = (document.getElementById('qq').value || '无').substring(0, 50);
         const wechat = (document.getElementById('wechat').value || '无').substring(0, 50);
         const other = (document.getElementById('other').value || '无').substring(0, 50);
         const message = (document.getElementById('message').value || '无').substring(0, 50);
-        
-        // 检查提交频率
+
         const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
         const currentTime = Date.now();
         const oneMinuteAgo = currentTime - 60 * 1000;
-        
-        // 过滤出一分钟内的提交记录
         const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-        
+
         if (recentRecords.length >= 1) {
             showMessage('每分钟只能提交一次，请稍后再试', 'error');
             return;
         }
-        
-        // 构建邮件数据
+
         const emailData = {
             type: '加入我们',
             qq: qq,
@@ -203,8 +178,7 @@ if (joinForm) {
             other: other,
             message: message
         };
-        
-        // 发送邮件请求
+
         fetch('https://c-piqm.onrender.com/send-join-request', {
             method: 'POST',
             headers: {
@@ -215,10 +189,8 @@ if (joinForm) {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 添加本次提交记录
                 recentRecords.push({ time: currentTime });
                 localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
-                
                 showPopup('提交成功，我们会尽快与您联系');
             } else {
                 showMessage('提交失败，请稍后重试', 'error');
@@ -228,8 +200,7 @@ if (joinForm) {
             console.error('发送请求失败:', error);
             showMessage('网络错误，请稍后重试', 'error');
         });
-        
-        // 重置表单
+
         setTimeout(() => {
             joinForm.reset();
         }, 3000);
@@ -240,7 +211,6 @@ if (joinForm) {
 window.addEventListener('load', function() {
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease-in-out';
-    
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
@@ -252,26 +222,20 @@ buttons.forEach(btn => {
     btn.addEventListener('mouseenter', function() {
         this.style.transform = 'translateY(-3px)';
     });
-    
     btn.addEventListener('mouseleave', function() {
         this.style.transform = 'translateY(0)';
     });
-    
-    // 添加按钮点击涟漪效果
     btn.addEventListener('click', function(e) {
         const ripple = document.createElement('span');
         const rect = this.getBoundingClientRect();
         const size = Math.max(rect.width, rect.height);
         const x = e.clientX - rect.left - size / 2;
         const y = e.clientY - rect.top - size / 2;
-        
         ripple.style.width = ripple.style.height = size + 'px';
         ripple.style.left = x + 'px';
         ripple.style.top = y + 'px';
         ripple.classList.add('ripple');
-        
         this.appendChild(ripple);
-        
         setTimeout(() => {
             ripple.remove();
         }, 600);
@@ -279,13 +243,12 @@ buttons.forEach(btn => {
 });
 
 // 添加按钮点击涟漪效果的CSS
-const style = document.createElement('style');
-style.textContent = `
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
     .btn {
         position: relative;
         overflow: hidden;
     }
-    
     .ripple {
         position: absolute;
         border-radius: 50%;
@@ -294,7 +257,6 @@ style.textContent = `
         animation: ripple 0.6s linear;
         pointer-events: none;
     }
-    
     @keyframes ripple {
         to {
             transform: scale(4);
@@ -302,11 +264,14 @@ style.textContent = `
         }
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(rippleStyle);
 
 // 关闭举报弹窗函数
 function closeReportPopup() {
-    document.getElementById('report-popup').style.display = 'none';
+    const reportPopup = document.getElementById('report-popup');
+    if (reportPopup) {
+        reportPopup.style.display = 'none';
+    }
 }
 
 // 举报打手表单提交功能
@@ -314,33 +279,28 @@ const reportForm = document.getElementById('report-form');
 if (reportForm) {
     reportForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const reportContent = (document.getElementById('report-content').value || '无').substring(0, 500);
-        
+
         if (!reportContent || reportContent === '无') {
             showMessage('请输入举报内容', 'error');
             return;
         }
-        
-        // 检查提交频率
-        const submitRecords = JSON.parse(localStorage.getItem('joinSubmitRecords') || '[]');
+
+        const submitRecords = JSON.parse(localStorage.getItem('reportSubmitRecords') || '[]');
         const currentTime = Date.now();
         const oneMinuteAgo = currentTime - 60 * 1000;
-        
-        // 过滤出一分钟内的提交记录
         const recentRecords = submitRecords.filter(record => record.time > oneMinuteAgo);
-        
+
         if (recentRecords.length >= 1) {
             showMessage('每分钟只能提交一次，请稍后再试', 'error');
             return;
         }
-        
-        // 构建邮件数据
+
         const emailData = {
             message: reportContent
         };
-        
-        // 发送邮件请求
+
         fetch('https://c-piqm.onrender.com/send-report', {
             method: 'POST',
             headers: {
@@ -351,10 +311,8 @@ if (reportForm) {
         .then(response => response.text())
         .then(data => {
             if (data.includes('邮件发送成功')) {
-                // 添加本次提交记录
                 recentRecords.push({ time: currentTime });
-                localStorage.setItem('joinSubmitRecords', JSON.stringify(recentRecords));
-                
+                localStorage.setItem('reportSubmitRecords', JSON.stringify(recentRecords));
                 showPopup('举报提交成功，我们会尽快处理');
             } else {
                 showMessage('提交失败，请稍后重试', 'error');
@@ -364,8 +322,7 @@ if (reportForm) {
             console.error('发送请求失败:', error);
             showMessage('网络错误，请稍后重试', 'error');
         });
-        
-        // 重置表单
+
         setTimeout(() => {
             reportForm.reset();
         }, 3000);
@@ -376,24 +333,26 @@ if (reportForm) {
 function checkServerStatus() {
     const serverStatus = document.getElementById('server-status');
     if (!serverStatus) return;
-    
-    // 尝试连接服务器
+
     fetch('https://c-piqm.onrender.com')
         .then(response => {
-            // 连接成功
             serverStatus.classList.remove('offline');
-            serverStatus.querySelector('.status-text').textContent = '服务器，连接成功';
+            const statusText = serverStatus.querySelector('.status-text');
+            if (statusText) {
+                statusText.textContent = '服务器，连接成功';
+            }
         })
         .catch(error => {
-            // 连接失败
             serverStatus.classList.add('offline');
-            serverStatus.querySelector('.status-text').textContent = '服务器，连接失败';
+            const statusText = serverStatus.querySelector('.status-text');
+            if (statusText) {
+                statusText.textContent = '服务器，连接失败';
+            }
         });
 }
 
 // 页面加载时检查服务器状态
 window.addEventListener('load', function() {
     checkServerStatus();
-    // 每5秒检查一次服务器状态
     setInterval(checkServerStatus, 5000);
 });
