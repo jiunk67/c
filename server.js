@@ -233,10 +233,44 @@ app.post('/send-report', (req, res) => {
     }
 });
 
+// 定期验证SMTP连接，防止长时间不使用断开
+function verifySMTPConnection() {
+    if (transporter) {
+        console.log('🔍 定期验证SMTP连接...');
+        transporter.verify((error, success) => {
+            if (error) {
+                console.error('❌ SMTP连接验证失败:', error.message);
+                // 重新创建传输器
+                try {
+                    transporter = nodemailer.createTransport({
+                        host: 'smtp.qq.com',
+                        port: 465,
+                        secure: true,
+                        auth: {
+                            user: 'suizhao_1120@qq.com',
+                            pass: 'glqptraodcfqccdh'
+                        }
+                    });
+                    console.log('🔄 重新创建邮件传输器成功');
+                } catch (error) {
+                    console.error('❌ 重新创建邮件传输器失败:', error.message);
+                    transporter = null;
+                }
+            } else {
+                console.log('✅ SMTP连接验证成功');
+            }
+        });
+    }
+}
+
+// 每30分钟验证一次SMTP连接
+setInterval(verifySMTPConnection, 30 * 60 * 1000);
+
 // 启动服务器
 app.listen(port, () => {
     console.log('=============================================');
     console.log('🚀 服务器启动成功');
     console.log('📡 服务器运行在 https://c-piqm.onrender.com:' + port);
+    console.log('⏰ 每30分钟自动验证SMTP连接');
     console.log('=============================================');
 });

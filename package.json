@@ -4,12 +4,14 @@
   "description": "俱乐部网站",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "wakeup": "node wakeup.js"
   },
   "dependencies": {
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "express": "^4.22.1",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.9.7",
+    "axios": "^1.6.2"
   }
 }
