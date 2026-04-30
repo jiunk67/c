@@ -248,7 +248,7 @@ function verifySMTPConnection() {
                         secure: true,
                         auth: {
                             user: 'suizhao_1120@qq.com',
-                            pass: 'glqptraodcfqccdh'
+                            pass: 'uundyiqtxtebcjbb'
                         }
                     });
                     console.log('🔄 重新创建邮件传输器成功');
